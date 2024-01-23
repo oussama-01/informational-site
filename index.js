@@ -1,56 +1,55 @@
 
-
-const http = require('http');
+// loading the node built in modules
+const http = require('node:http');
 const fs = require('fs');
 
-const url = require('url');
+// the values to change
+const hostName = '127.0.0.1';
+const port = 8080;
 
 
+// creating a server
+const myServer = http.createServer((req, res) => {
+
+    console.log(req.url);
 
 
-http.createServer((req, res) => {
-
-    let myUrl = req.url;
-    console.log(myUrl);
-
-
-
-    if (myUrl === '/') {
+    if (req.url === '/') {
         //code to serve the index page  
         fs.readFile('./index.html', (err, data) => {
             res.writeHead(200, { 'Content-Type': 'text/html' });
-            res.write(data);
+            return res.end(data);
 
-            return res.end();
         })
 
-    } else if (myUrl === '/about') {
-        // code to serve tha about page
+    } else if (req.url === '/about') {
+        // code to serve the about page
         fs.readFile('./about.html', (err, data) => {
             res.writeHead(200, { 'Content-Type': 'text/html' });
-            res.write(data);
+            return res.end(data);
 
-            return res.end();
         })
-    } else if (myUrl === '/contact-me') {
+    } else if (req.url === '/contact-me') {
         //code to serve the contact page
         fs.readFile('./contact-me.html', (err, data) => {
             res.writeHead(200, { 'Content-Type': 'text/html' });
-            res.write(data);
+            return res.end(data);
 
-            return res.end();
         })
     } else {
         //code to serve the 404 page
         fs.readFile('./404.html', (err, data) => {
             res.writeHead(200, { 'Content-Type': 'text/html' });
-            res.write(data);
+            return res.end(data);
 
-            return res.end();
         })
     }
 
 
 
-}).listen(8080);
+});
 
+
+// starting the listening by the server I created
+
+myServer.listen(8080);
