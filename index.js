@@ -1,55 +1,59 @@
 
-// loading the node built in modules
+// Loading the node built-in modules
 const http = require('node:http');
-const fs = require('fs');
+const url = require('node:url');
+const fs = require('node:fs');
 
-// the values to change
+//
 const hostName = '127.0.0.1';
 const port = 8080;
 
 
-// creating a server
-const myServer = http.createServer((req, res) => {
+// Creating an http server
 
+const server = http.createServer((req, res) => {
     console.log(req.url);
 
+    const myURL = new URL(req.url, 'http://localhost:8080');
+    console.log(myURL);
 
-    if (req.url === '/') {
-        //code to serve the index page  
-        fs.readFile('./index.html', (err, data) => {
+    if (myURL.pathname === '/') {
+        fs.readFile('index.html', (err, data) => {
+            //if (err) throw err;
             res.writeHead(200, { 'Content-Type': 'text/html' });
-            return res.end(data);
+            res.end(data);
 
-        })
+        });
 
-    } else if (req.url === '/about') {
-        // code to serve the about page
-        fs.readFile('./about.html', (err, data) => {
+    } else if (myURL.pathname === '/about') {
+        fs.readFile('about.html', (err, data) => {
+            //if (err) throw err;
+
             res.writeHead(200, { 'Content-Type': 'text/html' });
-            return res.end(data);
+            res.end(data);
 
-        })
-    } else if (req.url === '/contact-me') {
-        //code to serve the contact page
-        fs.readFile('./contact-me.html', (err, data) => {
-            res.writeHead(200, { 'Content-Type': 'text/html' });
-            return res.end(data);
+        });
 
-        })
+    } else if (myURL.pathname === '/contact-me') {
+        fs.readFile('contact-me.html', (err, data) => {
+            //if (err) throw err;
+
+            res.end(data);
+
+        });
+
     } else {
-        //code to serve the 404 page
-        fs.readFile('./404.html', (err, data) => {
-            res.writeHead(200, { 'Content-Type': 'text/html' });
-            return res.end(data);
+        fs.readFile('404.html', (err, data) => {
+            //if (err) throw err;
+            res.end(data);
 
-        })
-    }
-
-
-
+        });
+    };
 });
 
 
-// starting the listening by the server I created
+// making the created server to listen
 
-myServer.listen(8080);
+server.listen(port, () => {
+    console.log('the server iss listening '); 
+});
